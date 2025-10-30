@@ -4,6 +4,7 @@ import FootfallMonitor from "@/components/dashboard/FootfallMonitor";
 import ShelfStatus from "@/components/dashboard/ShelfStatus";
 import TaskQueue from "@/components/dashboard/TaskQueue";
 import KPISummary from "@/components/dashboard/KPISummary";
+import AIInsights from "@/components/dashboard/AIInsights";
 import ChatPanel from "@/components/chat/ChatPanel";
 
 const Index = () => {
@@ -31,7 +32,8 @@ const Index = () => {
           <ShelfStatus />
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <AIInsights />
           <TaskQueue />
         </div>
       </main>
