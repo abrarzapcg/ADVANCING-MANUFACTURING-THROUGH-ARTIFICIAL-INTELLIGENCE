@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, ThumbsUp, ThumbsDown } from "lucide-react";
 import { toast } from "sonner";
+import { useTasks } from "@/contexts/TaskContext";
 
 interface Insight {
   id: number;
@@ -15,6 +16,7 @@ interface Insight {
 }
 
 const AIInsights = () => {
+  const { addTask } = useTasks();
   const [insights, setInsights] = useState<Insight[]>([
     {
       id: 1,
@@ -93,8 +95,22 @@ const AIInsights = () => {
   const handleApprove = (insight: Insight) => {
     if (insight.quantity && insight.quantity > 0) {
       toast.success(`Order placed successfully for ${insight.product} (${insight.quantity} units).`);
+      
+      // Create a task for restocking
+      addTask({
+        title: `Restock ${insight.product} (${insight.quantity} units ordered)`,
+        priority: insight.urgency === 'high' ? 'high' : 'medium',
+        completed: false
+      });
     } else {
       toast.success(`Action approved for ${insight.product}.`);
+      
+      // Create a general task
+      addTask({
+        title: `Follow up on ${insight.product} - ${insight.title}`,
+        priority: insight.urgency === 'high' ? 'high' : 'medium',
+        completed: false
+      });
     }
     
     setInsights(prev => prev.filter(i => i.id !== insight.id));

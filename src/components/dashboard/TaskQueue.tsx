@@ -1,23 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
-
-interface Task {
-  id: number;
-  title: string;
-  priority: 'high' | 'medium' | 'low';
-  timestamp: Date;
-  completed: boolean;
-}
+import { useTasks } from "@/contexts/TaskContext";
 
 const TaskQueue = () => {
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, title: "Restock Shelf 4-D (Critical - 15% stock)", priority: 'high', timestamp: new Date(), completed: false },
-    { id: 2, title: "Monitor Entrance Zone (63 people - high traffic)", priority: 'high', timestamp: new Date(), completed: false },
-    { id: 3, title: "Check Shelf 2-B inventory (Low stock warning)", priority: 'medium', timestamp: new Date(), completed: false },
-    { id: 4, title: "Clean Aisle 5 (Low footfall - optimal time)", priority: 'low', timestamp: new Date(), completed: false },
-  ]);
+  const { tasks, addTask, completeTask } = useTasks();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,24 +21,16 @@ const TaskQueue = () => {
         const randomTask = newTaskOptions[Math.floor(Math.random() * newTaskOptions.length)];
         const randomPriority = Math.random() > 0.7 ? 'high' : Math.random() > 0.5 ? 'medium' : 'low';
         
-        setTasks(prev => [{
-          id: Date.now(),
+        addTask({
           title: `${randomTask} - Auto-generated alert`,
           priority: randomPriority as 'high' | 'medium' | 'low',
-          timestamp: new Date(),
           completed: false
-        }, ...prev].slice(0, 10));
+        });
       }
     }, 8000);
 
     return () => clearInterval(interval);
-  }, [tasks]);
-
-  const completeTask = (id: number) => {
-    setTasks(prev => prev.map(task => 
-      task.id === id ? { ...task, completed: true } : task
-    ));
-  };
+  }, [tasks, addTask]);
 
   const getPriorityColor = (priority: string) => {
     if (priority === 'high') return 'border-l-destructive bg-destructive/5';

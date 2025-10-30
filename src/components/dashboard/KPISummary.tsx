@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
-import { TrendingUp, CheckCircle, Package, Activity } from "lucide-react";
+import { TrendingUp, CheckCircle, Package, Activity, Smile } from "lucide-react";
 
 interface KPI {
   label: string;
@@ -15,6 +15,7 @@ const KPISummary = () => {
     { label: "Store Efficiency", value: 87, unit: "%", trend: 2.5, icon: Activity },
     { label: "Task Completion", value: 92, unit: "%", trend: 5.1, icon: CheckCircle },
     { label: "Avg. Restock Time", value: 12, unit: "min", trend: -3.2, icon: Package },
+    { label: "Customer Satisfaction", value: 94, unit: "%", trend: 3.8, icon: Smile },
   ]);
 
   useEffect(() => {
