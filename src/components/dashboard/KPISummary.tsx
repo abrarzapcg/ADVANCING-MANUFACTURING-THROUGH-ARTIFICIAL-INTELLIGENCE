@@ -15,7 +15,7 @@ const KPISummary = () => {
     { label: "Store Efficiency", value: 87, unit: "%", trend: 2.5, icon: Activity },
     { label: "Task Completion", value: 92, unit: "%", trend: 5.1, icon: CheckCircle },
     { label: "Avg. Restock Time", value: 12, unit: "min", trend: -3.2, icon: Package },
-    { label: "Customer Satisfaction", value: 94, unit: "%", trend: 3.8, icon: Smile },
+    { label: "Customer Satisfaction", value: 65, unit: "%", trend: 1.2, icon: Smile },
     { label: "Sales", value: 15200, unit: "$", trend: 4.2, icon: Activity },
   ]);
 
@@ -27,6 +27,13 @@ const KPISummary = () => {
             ...kpi,
             value: Math.max(10000, Math.min(20000, kpi.value + (Math.random() * 400 - 200))),
             trend: (Math.random() * 10 - 5),
+          };
+        }
+        if (kpi.label === "Customer Satisfaction") {
+          return {
+            ...kpi,
+            value: Math.max(60, Math.min(70, kpi.value + (Math.random() * 2 - 1))),
+            trend: (Math.random() * 6 - 3),
           };
         }
         return {

@@ -124,8 +124,8 @@ const ChatPanel = () => {
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-96 h-[600px] shadow-elevated flex flex-col animate-slide-up">
-          <div className="bg-gradient-primary text-primary-foreground p-4 rounded-t-lg flex items-center justify-between">
+        <Card className="fixed bottom-6 right-6 w-96 max-h-[600px] shadow-elevated flex flex-col animate-slide-up">
+          <div className="bg-gradient-primary text-primary-foreground p-4 rounded-t-lg flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
               <h3 className="font-semibold">AI Assistant</h3>
@@ -166,7 +166,7 @@ const ChatPanel = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 border-t">
+          <div className="p-4 border-t shrink-0">
             <div className="flex gap-2">
               <Input
                 value={input}
