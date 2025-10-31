@@ -2,7 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageSquare, Send, X, Minimize2 } from "lucide-react";
+import { MessageSquare, Send, Minimize2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useStoreData } from "@/hooks/useStoreData";
+import { useToast } from "@/hooks/use-toast";
+import VoiceInput from "./VoiceInput";
 
 interface Message {
   id: number;
@@ -22,7 +26,10 @@ const ChatPanel = () => {
     }
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const storeData = useStoreData();
+  const { toast } = useToast();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -52,8 +59,8 @@ const ChatPanel = () => {
     return () => clearInterval(interval);
   }, [isOpen]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now(),
@@ -63,29 +70,45 @@ const ChatPanel = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput("");
+    setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      let response = "I'm processing your request...";
-      
-      if (input.toLowerCase().includes('footfall') || input.toLowerCase().includes('aisle')) {
-        response = "Currently monitoring 6 zones. Entrance Zone has the highest footfall at 63 people. Aisle 4 (Snacks) has 51 people, while Aisle 5 (Household) has the lowest at 19 people.";
-      } else if (input.toLowerCase().includes('shelf') || input.toLowerCase().includes('stock')) {
-        response = "Shelf status update: Shelf 4-D is critical at 15% stock and requires immediate attention. Shelves 2-B and 6-F are at low stock levels (45% and 38%). All other shelves are at normal levels.";
-      } else if (input.toLowerCase().includes('task')) {
-        response = "Current task queue shows 4 active tasks. Top priority: Restock Shelf 4-D and monitor Entrance Zone traffic. Task completion rate is currently at 92%.";
-      } else if (input.toLowerCase().includes('efficiency') || input.toLowerCase().includes('kpi')) {
-        response = "Store efficiency is at 87%, with a positive trend of +2.5%. Task completion rate is strong at 92% (+5.1%). Average restock time has improved to 12 minutes (-3.2%).";
-      }
+    try {
+      const { data, error } = await supabase.functions.invoke('store-chat', {
+        body: {
+          messages: messages.concat(userMessage).map(m => ({
+            role: m.role,
+            content: m.content
+          })),
+          storeData
+        }
+      });
+
+      if (error) throw error;
 
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
         role: 'assistant',
-        content: response,
+        content: data.reply,
         timestamp: new Date(),
       }]);
-    }, 1000);
+    } catch (error) {
+      console.error('Chat error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to get response. Please try again.",
+        variant: "destructive",
+      });
+      // Restore the input on error
+      setInput(currentInput);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVoiceTranscript = (transcript: string) => {
+    setInput(transcript);
   };
 
   return (
@@ -148,11 +171,13 @@ const ChatPanel = () => {
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                onKeyDown={(e) => e.key === 'Enter' && !isLoading && handleSend()}
                 placeholder="Ask about store operations..."
                 className="flex-1"
+                disabled={isLoading}
               />
-              <Button onClick={handleSend} size="icon">
+              <VoiceInput onTranscript={handleVoiceTranscript} />
+              <Button onClick={handleSend} size="icon" disabled={isLoading}>
                 <Send className="h-4 w-4" />
               </Button>
             </div>

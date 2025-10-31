@@ -5,9 +5,12 @@ import ShelfStatus from "@/components/dashboard/ShelfStatus";
 import KPISummary from "@/components/dashboard/KPISummary";
 import AIInsights from "@/components/dashboard/AIInsights";
 import Navigation from "@/components/layout/Navigation";
+import { Card } from "@/components/ui/card";
+import { useTasks } from "@/contexts/TaskContext";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const { tasks } = useTasks();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -39,6 +42,35 @@ const Dashboard = () => {
 
         <div className="mb-6">
           <AIInsights />
+        </div>
+
+        <div className="mb-6">
+          <Card className="p-6 shadow-card">
+            <h2 className="text-xl font-semibold mb-4">Task Overview</h2>
+            <div className="space-y-3">
+              {tasks.map((task) => (
+                <div key={task.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex-1">
+                    <p className="font-medium">{task.title}</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Assigned to: <span className="font-medium text-primary">{task.assignedTo}</span>
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                      task.status === 'completed' 
+                        ? 'bg-success/10 text-success' 
+                        : task.status === 'in_progress'
+                        ? 'bg-blue-500/10 text-blue-600'
+                        : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {task.status === 'completed' ? 'Completed' : task.status === 'in_progress' ? 'In Progress' : 'Pending'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
         </div>
       </main>
     </div>

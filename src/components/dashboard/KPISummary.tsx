@@ -16,15 +16,25 @@ const KPISummary = () => {
     { label: "Task Completion", value: 92, unit: "%", trend: 5.1, icon: CheckCircle },
     { label: "Avg. Restock Time", value: 12, unit: "min", trend: -3.2, icon: Package },
     { label: "Customer Satisfaction", value: 94, unit: "%", trend: 3.8, icon: Smile },
+    { label: "Sales", value: 15200, unit: "$", trend: 4.2, icon: Activity },
   ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setKpis(prev => prev.map(kpi => ({
-        ...kpi,
-        value: Math.max(0, Math.min(100, kpi.value + (Math.random() * 4 - 2))),
-        trend: (Math.random() * 10 - 5),
-      })));
+      setKpis(prev => prev.map(kpi => {
+        if (kpi.label === "Sales") {
+          return {
+            ...kpi,
+            value: Math.max(10000, Math.min(20000, kpi.value + (Math.random() * 400 - 200))),
+            trend: (Math.random() * 10 - 5),
+          };
+        }
+        return {
+          ...kpi,
+          value: Math.max(0, Math.min(100, kpi.value + (Math.random() * 4 - 2))),
+          trend: (Math.random() * 10 - 5),
+        };
+      }));
     }, 5000);
 
     return () => clearInterval(interval);
@@ -41,7 +51,7 @@ const KPISummary = () => {
                 <p className="text-sm font-medium text-muted-foreground">{kpi.label}</p>
               </div>
               <p className="text-4xl font-bold tabular-nums">
-                {kpi.value.toFixed(kpi.unit === "min" ? 0 : 1)}
+                {kpi.label === "Sales" ? kpi.value.toFixed(0) : kpi.value.toFixed(kpi.unit === "min" ? 0 : 1)}
                 <span className="text-xl text-muted-foreground ml-1">{kpi.unit}</span>
               </p>
             </div>

@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
+import { CheckCircle2, Clock, AlertCircle, Play } from "lucide-react";
 import { useTasks } from "@/contexts/TaskContext";
 
 const TaskQueue = () => {
-  const { tasks, addTask, completeTask } = useTasks();
+  const { tasks, addTask, completeTask, startTask } = useTasks();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -75,7 +75,7 @@ const TaskQueue = () => {
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
                     {getPriorityIcon(task.priority)}
                     <span className="text-xs text-muted-foreground">
                       {task.timestamp.toLocaleTimeString('en-US', { 
@@ -92,18 +92,39 @@ const TaskQueue = () => {
                     }`}>
                       {task.priority.toUpperCase()}
                     </span>
+                    {task.assignedTo && (
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-primary/10 text-primary">
+                        {task.assignedTo}
+                      </span>
+                    )}
+                    {task.status === 'in_progress' && (
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-500/10 text-blue-600">
+                        IN PROGRESS
+                      </span>
+                    )}
                   </div>
                   <p className="font-medium">{task.title}</p>
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => completeTask(task.id)}
-                  className="shrink-0"
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-1" />
-                  Complete
-                </Button>
+                <div className="flex gap-2 shrink-0">
+                  {task.status === 'pending' && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => startTask(task.id)}
+                    >
+                      <Play className="h-4 w-4 mr-1" />
+                      Start Work
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => completeTask(task.id)}
+                  >
+                    <CheckCircle2 className="h-4 w-4 mr-1" />
+                    Complete
+                  </Button>
+                </div>
               </div>
             </div>
           ))
