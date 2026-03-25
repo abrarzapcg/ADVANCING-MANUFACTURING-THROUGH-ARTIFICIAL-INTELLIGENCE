@@ -1,73 +1,82 @@
-# Welcome to your Lovable project
+# Advancing Manufacturing Through Artificial Intelligence
 
-## Project info
+## Overview
 
-**URL**: https://lovable.dev/projects/a43775fa-8640-4ef8-b42f-19c3e22e8654
+This project is basically about how AI is being used in manufacturing right now, what people are doing with it, what works, what doesn’t, and where things might go next. It’s not super fancy, just a collection of notes, ideas, and maybe some experiments around AI in manufacturing.
 
-## How can I edit this code?
+## What’s in here
 
-There are several ways of editing your application.
+* Current landscape (like how AI is already being used)
+* Perspectives (opinions, industry trends, etc.)
+* Best practices (things that seem to work)
+* Challenges (stuff that breaks or is hard)
+* Future direction (guesses about what’s next)
 
-**Use Lovable**
+## Why this exists
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a43775fa-8640-4ef8-b42f-19c3e22e8654) and start prompting.
+Manufacturing is getting more “smart” with AI, but it’s also kind of messy. Different companies are doing different things, and there’s no single clean approach. This repo is an attempt to put some of that together in one place.
 
-Changes made via Lovable will be committed automatically to this repo.
+## Topics covered
 
-**Use your preferred IDE**
+* Predictive maintenance
+* Quality inspection using computer vision
+* Supply chain optimization
+* Robotics + automation
+* Data pipelines for manufacturing systems
+* Edge vs cloud AI (still confusing tbh)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Structure (kind of)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+/data           -> sample datasets (if any)
+/notebooks      -> experiments, rough work
+/src            -> actual code (if we write any)
+/docs           -> notes, writeups, random thoughts
 ```
 
-**Edit a file directly in GitHub**
+## How to use
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Honestly, just browse around. There might be some scripts or notebooks you can run, but nothing is super polished.
 
-**Use GitHub Codespaces**
+If something works, great. If not, yeah… expected.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Requirements
 
-## What technologies are used for this project?
+* Python (probably 3.9+)
+* Some ML libraries (pytorch, tensorflow, sklearn… depends)
+* Jupyter (for notebooks)
 
-This project is built with:
+## Setup
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+git clone <repo>
+cd <repo>
+pip install -r requirements.txt
+```
 
-## How can I deploy this project?
+## Challenges (aka reality check)
 
-Simply open [Lovable](https://lovable.dev/projects/a43775fa-8640-4ef8-b42f-19c3e22e8654) and click on Share -> Publish.
+* Data is messy or not available
+* Integration with existing manufacturing systems is painful
+* Real-time constraints are hard
+* Models work in demo but fail in production
+* Scaling is not trivial
 
-## Can I connect a custom domain to my Lovable project?
+## Future direction (maybe)
 
-Yes, you can!
+* More edge AI (less cloud dependency)
+* Better integration with IoT devices
+* More autonomous systems
+* Standardization (hopefully)
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Contributing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+If you want to add something, just do it. Open a PR or whatever.
+
+## Disclaimer
+
+This is not a production-ready system. It’s more like a learning / exploration repo.
+
+## License
+
+TBD (probably something permissive)
